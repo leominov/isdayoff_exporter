@@ -43,7 +43,6 @@ func (e *Exporter) collect() {
 	if err != nil {
 		logrus.Error(err)
 		e.totalErrors.Inc()
-		return
 	}
 
 	if isDayOff {
