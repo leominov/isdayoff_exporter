@@ -2,6 +2,11 @@
 
 Based on https://isdayoff.ru.
 
+## Metrics
+
+* `isdayoff`
+* `isdayoff_errors_total`
+
 ## Usage
 
 ```
