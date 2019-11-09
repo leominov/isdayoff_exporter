@@ -7,6 +7,12 @@ Based on https://isdayoff.ru.
 * `isdayoff`
 * `isdayoff_errors_total`
 
+## Environment variables
+
+* `HTTP_PROXY`
+* `HTTPS_PROXY`
+* `NO_PROXY`
+
 ## Usage
 
 ```
