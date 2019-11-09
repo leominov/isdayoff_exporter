@@ -30,7 +30,7 @@ func main() {
 
 	logrus.SetFormatter(&logrus.JSONFormatter{})
 
-	logrus.Info("Starting IsDayOff Exporter...")
+	logrus.Infof("Starting IsDayOff Exporter %s...", version)
 
 	exp := NewExporter()
 	err := prometheus.Register(exp)
