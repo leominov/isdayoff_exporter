@@ -9,53 +9,70 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+const exporter = "isdayoff"
+
 type Exporter struct {
-	httpCli     *http.Client
-	isDayOff    prometheus.Gauge
-	totalErrors prometheus.Counter
+	httpCli      *http.Client
+	IsDayOff     prometheus.Gauge
+	ScrapeErrors prometheus.Counter
+	Error        prometheus.Gauge
 }
 
 func NewExporter() *Exporter {
+	namespace := exporter
 	return &Exporter{
 		httpCli: httpclient.New(),
-		isDayOff: prometheus.NewGauge(
+		IsDayOff: prometheus.NewGauge(
 			prometheus.GaugeOpts{
-				Name: "isdayoff",
-				Help: "Is day off for current date.",
+				Name: exporter,
+				Help: "Is day off for current date (1 for day off).",
 			},
 		),
-		totalErrors: prometheus.NewGauge(
+		ScrapeErrors: prometheus.NewCounter(
+			prometheus.CounterOpts{
+				Namespace: namespace,
+				Name:      "scrape_errors_total",
+				Help:      "Total number of times an error occurred.",
+			},
+		),
+		Error: prometheus.NewGauge(
 			prometheus.GaugeOpts{
-				Name: "isdayoff_errors_total",
-				Help: "Number of errors while requesting data.",
+				Namespace: namespace,
+				Name:      "last_scrape_error",
+				Help:      "Whether the last scrape of metrics from isdayoff.ru resulted in an error (1 for error, 0 for success).",
 			},
 		),
 	}
 }
 
 func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
-	ch <- e.isDayOff.Desc()
-	ch <- e.totalErrors.Desc()
+	ch <- e.IsDayOff.Desc()
+	ch <- e.ScrapeErrors.Desc()
+	ch <- e.Error.Desc()
 }
 
 func (e *Exporter) collect() {
 	isDayOff, err := isdayoff.IsDayOffToday(e.httpCli)
 	if err != nil {
 		logrus.Error(err)
-		e.totalErrors.Inc()
+		e.ScrapeErrors.Inc()
+		e.Error.Set(1.0)
+	} else {
+		e.Error.Set(0.0)
 	}
 
 	if isDayOff {
-		e.isDayOff.Set(1.0)
+		e.IsDayOff.Set(1.0)
 		return
 	}
 
-	e.isDayOff.Set(0.0)
+	e.IsDayOff.Set(0.0)
 }
 
 func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 	e.collect()
 
-	ch <- e.isDayOff
-	ch <- e.totalErrors
+	ch <- e.IsDayOff
+	ch <- e.ScrapeErrors
+	ch <- e.Error
 }

@@ -5,7 +5,8 @@ Based on https://isdayoff.ru.
 ## Metrics
 
 * `isdayoff`
-* `isdayoff_errors_total`
+* `isdayoff_scrape_errors_total`
+* `isdayoff_last_scrape_error`
 
 ## Environment variables
 

@@ -1,15 +1,13 @@
 package isdayoff
 
 import (
+	"net/http"
 	"testing"
 	"time"
-
-	"github.com/leominov/isdayoff_exporter/httpclient"
 )
 
 func TestIsDayOff(t *testing.T) {
 	currentTime := time.Now()
-	httpCli := httpclient.New()
 	tests := []struct {
 		date     time.Time
 		isDayOff bool
@@ -32,7 +30,7 @@ func TestIsDayOff(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		isDayOff, err := IsDayOff(httpCli, test.date)
+		isDayOff, err := IsDayOff(http.DefaultClient, test.date)
 		if (err != nil) != test.wantErr {
 			t.Errorf("IsDayOff() error=%v wantErr=%v", err, test.wantErr)
 		}
@@ -43,7 +41,7 @@ func TestIsDayOff(t *testing.T) {
 }
 
 func TestIsDayOffToday(t *testing.T) {
-	_, err := IsDayOffToday(httpclient.New())
+	_, err := IsDayOffToday(http.DefaultClient)
 	if err != nil {
 		t.Error(err)
 	}
