@@ -45,7 +45,7 @@ func main() {
 			<html>
 			<head><title>IsDayOff Exporter</title></head>
 			<body>
-			<h1>IsDayOff Exporter</h1>
+			<h1>IsDayOff Exporter ` + version + `</h1>
 			<p><a href='` + *metricPath + `'>Metrics</a></p>
 			</body>
 			</html>
