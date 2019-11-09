@@ -1,0 +1,14 @@
+---
+env:
+  - GO111MODULE=on
+dist: _output
+builds:
+  - binary: isdayoff_exporter
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - 386
+archives:
+  - name_template: '{{ .ProjectName }}-{{ .Version }}.{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'

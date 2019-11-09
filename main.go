@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"net/http"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -10,12 +11,22 @@ import (
 )
 
 var (
+	version string
+	commit  string
+	date    string
+
 	listenAddress = flag.String("web.listen-address", ":9393", "Address to listen on for web interface and telemetry.")
 	metricPath    = flag.String("web.telemetry-path", "/metrics", "Path under which to expose metrics.")
+	printsVersion = flag.Bool("version", false, "Prints version and exit.")
 )
 
 func main() {
 	flag.Parse()
+
+	if *printsVersion {
+		fmt.Printf("version=%s\ncommit=%s\ndate=%s\n", version, commit, date)
+		return
+	}
 
 	logrus.SetFormatter(&logrus.JSONFormatter{})
 
