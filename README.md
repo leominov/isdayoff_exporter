@@ -22,3 +22,7 @@ Usage of ./isdayoff_exporter:
   -web.telemetry-path string
     	Path under which to expose metrics. (default "/metrics")
 ```
+
+## Links
+
+* [Binary releases](/releases)
