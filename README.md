@@ -25,4 +25,4 @@ Usage of ./isdayoff_exporter:
 
 ## Links
 
-* [Binary releases](/releases)
+* [Binary releases](https://github.com/leominov/isdayoff_exporter/releases)
